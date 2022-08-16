@@ -14,9 +14,11 @@ import org.apache.http.client.utils.URIBuilder;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertTrue;
 
 import java.net.URI;
 import java.net.URISyntaxException;
+import java.util.List;
 
 import org.junit.Test;
 
@@ -58,6 +60,23 @@ public class CustomerApiTests {
         assertEquals(customerResponse.getAddress(), customer.getAddress());
         assertEquals(customerResponse.getEmail(), customer.getEmail());
         assertEquals(customerResponse.getContactNumber(), customer.getContactNumber());
+    }
+
+    @Test
+    public void whenGetAllCustomers_thenOK() throws URISyntaxException {
+        Customer customer = createRandomCustomer();
+        createCustomerAsUri(customer);
+
+        customer = createRandomCustomer();
+        createCustomerAsUri(customer);
+
+        URIBuilder ub = new URIBuilder(API_ROOT + "/getAll");
+        final URI uri = ub.build();
+
+        final Response response = RestAssured.get(uri);
+        assertEquals(HttpStatus.OK.value(), response.getStatusCode());
+        List<Customer> customerResponse = response.as(List.class);
+        assertTrue(customerResponse.size() > 0);
     }
 
     @Test

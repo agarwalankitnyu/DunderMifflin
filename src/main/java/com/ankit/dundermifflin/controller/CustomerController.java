@@ -45,7 +45,6 @@ public class CustomerController {
 
     @PostMapping(value = "/create")
     public ResponseEntity<Customer> create(@RequestBody Customer customer) throws CustomerAlreadyExistException {
-        System.out.println(customer.toString());
         return new ResponseEntity<Customer>(service.createCustomer(customer), HttpStatus.CREATED);
     }
 
